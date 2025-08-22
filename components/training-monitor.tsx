@@ -27,10 +27,14 @@ export function TrainingMonitor({ model, dataset, isTraining }: TrainingMonitorP
   const [valLoss, setValLoss] = useState(1.2)
   const [learningRate, setLearningRate] = useState(0.0001)
   const [logs, setLogs] = useState<string[]>([])
+  const [startTime, setStartTime] = useState<Date | null>(null)
 
   useEffect(() => {
     if (!isTraining) return
 
+    if (!startTime) {
+      setStartTime(new Date())
+    }
     const interval = setInterval(() => {
       setProgress((prev) => Math.min(prev + 1, 100))
       setCurrentEpoch((prev) => Math.min(prev + 1, 100))
@@ -198,7 +202,7 @@ export function TrainingMonitor({ model, dataset, isTraining }: TrainingMonitorP
             </Button>
             <div className="flex-1" />
             <Badge variant="outline" className="text-xs">
-              Started: {new Date().toLocaleTimeString()}
+              Started: {startTime ? startTime.toLocaleTimeString() : "Not started"}
             </Badge>
           </div>
         </CardContent>

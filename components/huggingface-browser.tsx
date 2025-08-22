@@ -25,9 +25,22 @@ export function HuggingFaceBrowser() {
   const [models, setModels] = useState<HFModel[]>([])
   const [loading, setLoading] = useState(false)
   const [downloadProgress, setDownloadProgress] = useState<Record<string, DownloadProgress>>({})
+  const [connectionStatus, setConnectionStatus] = useState<"connected" | "connecting" | "error">("connecting")
 
   useEffect(() => {
-    handleSearch()
+    // Simulate connection check
+    const checkConnection = async () => {
+      setConnectionStatus("connecting")
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1500))
+        setConnectionStatus("connected")
+        handleSearch()
+      } catch (error) {
+        setConnectionStatus("error")
+      }
+    }
+    
+    checkConnection()
   }, [activeTab])
 
   const handleSearch = async () => {
@@ -206,6 +219,9 @@ export function HuggingFaceBrowser() {
           <CardTitle className="flex items-center gap-2">
             <ExternalLink className="h-5 w-5" />
             Hugging Face Hub Browser
+            <Badge variant={connectionStatus === "connected" ? "secondary" : "outline"}>
+              {connectionStatus === "connected" ? "Connected" : connectionStatus === "connecting" ? "Connecting..." : "Offline"}
+            </Badge>
           </CardTitle>
           <CardDescription>Browse and download datasets and models from the LeRobot community</CardDescription>
         </CardHeader>
@@ -229,6 +245,14 @@ export function HuggingFaceBrowser() {
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
             </Button>
           </div>
+          
+          {connectionStatus === "error" && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-600">
+                Unable to connect to Hugging Face Hub. Please check your internet connection.
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -245,9 +269,14 @@ export function HuggingFaceBrowser() {
         </TabsList>
 
         <TabsContent value="datasets" className="space-y-4">
-          {loading ? (
+          {loading || connectionStatus !== "connected" ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin" />
+              <div className="text-center">
+                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
+                <p className="text-sm text-muted-foreground">
+                  {connectionStatus === "connecting" ? "Connecting to Hub..." : "Loading datasets..."}
+                </p>
+              </div>
             </div>
           ) : (
             <div className="grid gap-4">
@@ -267,9 +296,14 @@ export function HuggingFaceBrowser() {
         </TabsContent>
 
         <TabsContent value="models" className="space-y-4">
-          {loading ? (
+          {loading || connectionStatus !== "connected" ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin" />
+              <div className="text-center">
+                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
+                <p className="text-sm text-muted-foreground">
+                  {connectionStatus === "connecting" ? "Connecting to Hub..." : "Loading models..."}
+                </p>
+              </div>
             </div>
           ) : (
             <div className="grid gap-4">

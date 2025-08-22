@@ -21,10 +21,14 @@ export function EvaluationMonitor({ policy, isRunning }: EvaluationMonitorProps)
   const [currentEpisode, setCurrentEpisode] = useState(0)
   const [successRate, setSuccessRate] = useState(0)
   const [logs, setLogs] = useState<string[]>([])
+  const [startTime, setStartTime] = useState<Date | null>(null)
 
   useEffect(() => {
     if (!isRunning) return
 
+    if (!startTime) {
+      setStartTime(new Date())
+    }
     const interval = setInterval(() => {
       setProgress((prev) => Math.min(prev + 2, 100))
       setCurrentEpisode((prev) => Math.min(prev + 1, 100))
@@ -189,7 +193,7 @@ export function EvaluationMonitor({ policy, isRunning }: EvaluationMonitorProps)
             </Button>
             <div className="flex-1" />
             <Badge variant="outline" className="text-xs">
-              Started: {new Date().toLocaleTimeString()}
+              Started: {startTime ? startTime.toLocaleTimeString() : "Not started"}
             </Badge>
           </div>
         </CardContent>
