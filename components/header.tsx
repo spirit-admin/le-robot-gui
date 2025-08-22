@@ -103,8 +103,12 @@ export function Header({ activeView = "dashboard" }: HeaderProps) {
         return "Policy Evaluation"
       case "training":
         return "Model Training"
+      case "simulation":
+        return "Simulation Interface"
       case "monitoring":
         return "System Monitoring"
+      case "settings":
+        return "Settings & Preferences"
       default:
         return "LeRobot Dashboard"
     }

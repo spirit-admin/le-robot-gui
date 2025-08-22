@@ -49,6 +49,7 @@ export function SimulationInterface({ className }: SimulationInterfaceProps) {
   const [showAxes, setShowAxes] = useState(true)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [isInitialized, setIsInitialized] = useState(false)
 
   // Simulation metrics
   const [metrics, setMetrics] = useState({
@@ -87,7 +88,18 @@ export function SimulationInterface({ className }: SimulationInterfaceProps) {
     return () => clearInterval(interval)
   }, [isRunning, isPaused])
 
+  // Initialize simulation environment
+  useEffect(() => {
+    const initializeSimulation = async () => {
+      // Simulate initialization delay
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      setIsInitialized(true)
+    }
+    
+    initializeSimulation()
+  }, [])
   const handleStart = () => {
+    if (!isInitialized) return
     setIsRunning(true)
     setIsPaused(false)
   }
@@ -139,12 +151,12 @@ export function SimulationInterface({ className }: SimulationInterfaceProps) {
             <div className="flex items-center gap-2">
               <Button
                 onClick={handleStart}
-                disabled={isRunning && !isPaused}
+                disabled={(isRunning && !isPaused) || !isInitialized}
                 size="sm"
                 className="bg-primary hover:bg-primary/90"
               >
                 <Play className="h-4 w-4 mr-1" />
-                Start
+                {!isInitialized ? "Initializing..." : "Start"}
               </Button>
               <Button onClick={handlePause} disabled={!isRunning} variant="outline" size="sm">
                 {isPaused ? <Play className="h-4 w-4 mr-1" /> : <Pause className="h-4 w-4 mr-1" />}
@@ -215,9 +227,11 @@ export function SimulationInterface({ className }: SimulationInterfaceProps) {
                 {/* Simulation Overlay */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
-                    <Bot className="h-16 w-16 text-primary mx-auto mb-4 animate-pulse" />
+                    <Bot className={`h-16 w-16 text-primary mx-auto mb-4 ${!isInitialized ? 'animate-pulse' : ''}`} />
                     <h3 className="text-lg font-semibold text-foreground mb-2">Genesis Simulation Engine</h3>
-                    <p className="text-muted-foreground mb-4">3D robotics simulation environment</p>
+                    <p className="text-muted-foreground mb-4">
+                      {!isInitialized ? "Initializing simulation environment..." : "3D robotics simulation environment"}
+                    </p>
                     <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Target className="h-4 w-4" />
@@ -227,6 +241,12 @@ export function SimulationInterface({ className }: SimulationInterfaceProps) {
                         <Layers className="h-4 w-4" />
                         Environment: {selectedEnvironment}
                       </div>
+                      {isInitialized && (
+                        <div className="flex items-center gap-1">
+                          <Activity className="h-4 w-4 text-green-500" />
+                          Ready
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

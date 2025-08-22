@@ -36,26 +36,38 @@ export function MainContent() {
               <Button
                 className="h-auto p-4 flex flex-col items-center gap-2 bg-transparent"
                 variant="outline"
-                onClick={() => setActiveView("datasets")}
+                onClick={() => window.location.reload()}
               >
                 <Database className="h-6 w-6" />
                 <span className="font-medium">Load Dataset</span>
                 <span className="text-xs text-muted-foreground">From HuggingFace Hub</span>
               </Button>
 
-              <Button className="h-auto p-4 flex flex-col items-center gap-2 bg-transparent" variant="outline">
+              <Button 
+                className="h-auto p-4 flex flex-col items-center gap-2 bg-transparent" 
+                variant="outline"
+                onClick={() => window.location.reload()}
+              >
                 <Eye className="h-6 w-6" />
                 <span className="font-medium">Visualize Data</span>
                 <span className="text-xs text-muted-foreground">Explore episodes</span>
               </Button>
 
-              <Button className="h-auto p-4 flex flex-col items-center gap-2 bg-transparent" variant="outline">
+              <Button 
+                className="h-auto p-4 flex flex-col items-center gap-2 bg-transparent" 
+                variant="outline"
+                onClick={() => window.location.reload()}
+              >
                 <Brain className="h-6 w-6" />
                 <span className="font-medium">Evaluate Policy</span>
                 <span className="text-xs text-muted-foreground">Test pretrained models</span>
               </Button>
 
-              <Button className="h-auto p-4 flex flex-col items-center gap-2 bg-transparent" variant="outline">
+              <Button 
+                className="h-auto p-4 flex flex-col items-center gap-2 bg-transparent" 
+                variant="outline"
+                onClick={() => window.location.reload()}
+              >
                 <Play className="h-6 w-6" />
                 <span className="font-medium">Train Model</span>
                 <span className="text-xs text-muted-foreground">Start new training</span>
@@ -92,7 +104,7 @@ export function MainContent() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant={dataset.status === "ready" ? "secondary" : "outline"}>{dataset.status}</Badge>
-                    <Button variant="ghost" size="sm" onClick={() => setActiveView("datasets")}>
+                    <Button variant="ghost" size="sm" onClick={() => window.location.reload()}>
                       <Eye className="h-4 w-4" />
                     </Button>
                   </div>

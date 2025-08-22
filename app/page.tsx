@@ -9,6 +9,7 @@ import { PolicyEvaluation } from "@/components/policy-evaluation"
 import { ModelTraining } from "@/components/model-training"
 import { MonitoringDashboard } from "@/components/monitoring-dashboard"
 import { SimulationInterface } from "@/components/simulation-interface"
+import { SettingsPanel } from "@/components/settings-panel"
 
 export default function HomePage() {
   const [activeView, setActiveView] = useState("dashboard")
@@ -25,6 +26,8 @@ export default function HomePage() {
         return <SimulationInterface />
       case "monitoring":
         return <MonitoringDashboard />
+      case "settings":
+        return <SettingsPanel />
       case "dashboard":
       default:
         return <MainContent />
